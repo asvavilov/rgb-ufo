@@ -4,9 +4,6 @@
 
 // TODO навести порядок (убрать мусор, определиться с библиотекой)
 
-// NeoPixel Ring simple sketch (c) 2013 Shae Erisson
-// released under the GPLv3 license to match the rest of the AdaFruit NeoPixel library
-
 #include "FastLED.h"
 #ifdef __AVR__
 #include <avr/power.h>
@@ -35,7 +32,8 @@ void setup()
 	FastLED.addLeds<NEOPIXEL, OUTER_LED_PIN>(outerLeds, OUTER_LED_NUM);
 	FastLED.addLeds<NEOPIXEL, INNER_LED_PIN>(innerLeds, INNER_LED_NUM);
 
-	randomSeed(analogRead(0));
+	// если используется random
+	//randomSeed(analogRead(0));
 }
 
 void loop()
