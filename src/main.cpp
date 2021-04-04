@@ -18,9 +18,9 @@
 CRGB innerLeds[INNER_LED_NUM];
 CRGB outerLeds[OUTER_LED_NUM];
 
-int outerLedDelay = 10; // delay
+#define OUTER_LED_DELAY 10 // delay
 unsigned long outerLedTimer = 0;
-int innerLedDelay = 500; // delay
+#define INNER_LED_DELAY 500 // delay
 unsigned long innerLedTimer = 0;
 
 int rgbCnt = 0;
@@ -43,7 +43,7 @@ void loop()
 
 	unsigned long ms = millis();
 
-	if (ms > outerLedTimer + outerLedDelay)
+	if (ms > outerLedTimer + OUTER_LED_DELAY)
 	{
 		outerLedTimer = ms;
 
@@ -54,9 +54,7 @@ void loop()
 			b = (rgbCnt + i) % 3 == 2 ? 255 : 0;
 			outerLeds[i] = CRGB(r, g, b);
 		}*/
-		/*// так иногда красный пиксель по всем по кругу пробегает
-		gHue += gHueDelta;
-		fill_rainbow(outerLeds, OUTER_LED_NUM, gHue, gHueDelta);*/
+
 		gHue += gHueDelta;
 		for (int i = 0; i < OUTER_LED_NUM; i++)
 		{
@@ -64,7 +62,7 @@ void loop()
 		}
 	}
 
-	if (ms > innerLedTimer + innerLedDelay)
+	if (ms > innerLedTimer + INNER_LED_DELAY)
 	{
 		innerLedTimer = ms;
 
