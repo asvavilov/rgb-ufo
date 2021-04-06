@@ -2,21 +2,18 @@
 
 // TODO решить с платой с wifi и управлением
 
-// TODO навести порядок (убрать мусор, определиться с библиотекой)
-
 #include "FastLED.h"
 #ifdef __AVR__
 #include <avr/power.h>
 #endif
 
-#define OUTER_LED_PIN 3
-#define INNER_LED_PIN 5
+#define LED_PIN 3
 
-#define OUTER_LED_NUM 24
 #define INNER_LED_NUM 6
+#define OUTER_LED_NUM 24
+#define LED_NUM INNER_LED_NUM + OUTER_LED_NUM
 
-CRGB innerLeds[INNER_LED_NUM];
-CRGB outerLeds[OUTER_LED_NUM];
+CRGB leds[LED_NUM];
 
 #define OUTER_LED_DELAY 10 // delay
 unsigned long outerLedTimer = 0;
@@ -29,8 +26,7 @@ uint8_t gHueDelta = 3;
 
 void setup()
 {
-	FastLED.addLeds<NEOPIXEL, OUTER_LED_PIN>(outerLeds, OUTER_LED_NUM);
-	FastLED.addLeds<NEOPIXEL, INNER_LED_PIN>(innerLeds, INNER_LED_NUM);
+	FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_NUM);
 
 	// если используется random
 	//randomSeed(analogRead(0));
@@ -43,25 +39,6 @@ void loop()
 
 	unsigned long ms = millis();
 
-	if (ms > outerLedTimer + OUTER_LED_DELAY)
-	{
-		outerLedTimer = ms;
-
-		/*for (int i = 0; i < OUTER_LED_NUM; i++)
-		{
-			r = (rgbCnt + i) % 3 == 0 ? 255 : 0;
-			g = (rgbCnt + i) % 3 == 1 ? 255 : 0;
-			b = (rgbCnt + i) % 3 == 2 ? 255 : 0;
-			outerLeds[i] = CRGB(r, g, b);
-		}*/
-
-		gHue += gHueDelta;
-		for (int i = 0; i < OUTER_LED_NUM; i++)
-		{
-			outerLeds[i].setHue((gHue + i * 10) % 255);
-		}
-	}
-
 	if (ms > innerLedTimer + INNER_LED_DELAY)
 	{
 		innerLedTimer = ms;
@@ -69,11 +46,22 @@ void loop()
 		int r = (rgbCnt) % 3 == 2 ? 255 : 0;
 		int g = (rgbCnt) % 3 == 1 ? 255 : 0;
 		int b = (rgbCnt) % 3 == 0 ? 255 : 0;
-		fill_solid(innerLeds, INNER_LED_NUM, CRGB(r, g, b));
+		fill_solid(leds, INNER_LED_NUM, CRGB(r, g, b));
 		rgbCnt++;
 		if (rgbCnt >= 3)
 		{
 			rgbCnt = 0;
+		}
+	}
+
+	if (ms > outerLedTimer + OUTER_LED_DELAY)
+	{
+		outerLedTimer = ms;
+
+		gHue += gHueDelta;
+		for (int i = INNER_LED_NUM; i < INNER_LED_NUM + OUTER_LED_NUM; i++)
+		{
+			leds[i].setHue((gHue + i * 10) % 255);
 		}
 	}
 
