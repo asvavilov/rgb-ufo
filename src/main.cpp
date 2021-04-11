@@ -3,11 +3,8 @@
 // TODO решить с платой с wifi и управлением
 
 #include "FastLED.h"
-#ifdef __AVR__
-#include <avr/power.h>
-#endif
 
-#define LED_PIN 3
+#define LED_PIN 2
 
 #define INNER_LED_NUM 6
 #define OUTER_LED_NUM 24
